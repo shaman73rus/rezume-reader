@@ -13,7 +13,7 @@ import java.util.Properties;
  * Class from which all Java applications begin executing
  * @author Khvatkov Nikita
  * @since 1.0.0
- * @version 1.0.011
+ * @version 1.0.0111
  */
 public class Main {
 
