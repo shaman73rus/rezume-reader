@@ -3,6 +3,8 @@ package com.reader.rezume.validation;
 import com.reader.rezume.exception.ArgumentSizeException;
 
 import java.io.*;
+import org.apache.log4j.Logger;
+
 
 /**
  * Class to verify the validation of received files
@@ -11,7 +13,7 @@ import java.io.*;
  * @version 1.0.0
  */
 public class ValidationUtil {
-
+    private static final Logger log = Logger.getLogger(ValidationUtil.class);
     /**
      * Method for verifying the validity of files
      * @param filePath array of entered values
@@ -20,11 +22,14 @@ public class ValidationUtil {
     public static boolean isValidArguments(String[] filePath) throws FileNotFoundException {
 
         if (filePath.length < 2) {
+            log.info("No arguments are entered");
             throw new ArgumentSizeException("You provide less then count of parameters: " +  filePath.length);
         }
 
+
         if (!isValidFile(filePath[0]) & !isValidFile(filePath[1])){
             throw new IllegalArgumentException("One of the file is invalid! Please, specify valid files!");
+
         }
 
         return true;
