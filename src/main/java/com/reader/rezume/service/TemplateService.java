@@ -16,59 +16,48 @@ public class TemplateService {
      * @return object of type StringBuilder
      * @throws IOException Invalid file path
      */
-    public String getStringFromHtmlFile(String path) throws IOException {
+    public static BufferedReader getStringFromHtmlFile(String path) throws IOException {
         String nameOS = System.getProperty("os.name");
-        StringBuilder stringBuilder = new StringBuilder();
 
+        BufferedReader reader;
         if (nameOS.contains("Windows")) {
-            readFileFromWindowsSystem(path, stringBuilder);
+           reader = readFileFromWindowsSystem(path);
         } else if (nameOS.contains("Linux")) {
-            readFileFromLinuxSystem(path, stringBuilder);
+            reader = readFileFromLinuxSystem(path);
         } else {
-            readFileFromMacSystem(path, stringBuilder);
+            reader = readFileFromMacSystem(path);
         }
-        return stringBuilder.toString();
+        return reader;
     }
 
     /**
      * Method receives data from a file in a particular encoding
      * @param path
-     * @param stringBuilder
      * @throws IOException
      */
-    private void readFileFromLinuxSystem(String path, StringBuilder stringBuilder) throws IOException {
-        String line;
+    private static BufferedReader readFileFromLinuxSystem(String path) throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(path), "UTF-8"));
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-        }
+        return reader;
     }
 
-    private void readFileFromMacSystem(String path, StringBuilder stringBuilder) throws IOException {
-        String line;
+    private static BufferedReader readFileFromMacSystem(String path) throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(path), "MacCyrillic"));
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-        }
+        return reader;
     }
 
     /**
      * Method receives data from a file in a particular encoding
      * @param path
-     * @param stringBuilder
      * @throws IOException
      */
-    private void readFileFromWindowsSystem(String path, StringBuilder stringBuilder) throws IOException {
-        String line;
+    private static BufferedReader readFileFromWindowsSystem(String path) throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(path), "Cp1251"));
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-        }
+        return reader;
     }
 }
