@@ -15,5 +15,5 @@ public interface SummaryService {
      * Method for creating an html-file
      * @param Path - path to save the html file
      */
-    void createHtmlFile(String Path, String filePaths) throws IOException;
+    void createHtmlFile(String Path, String filePaths, String encoding) throws IOException;
 }

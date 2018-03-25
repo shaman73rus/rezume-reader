@@ -1,95 +1,60 @@
 package com.reader.rezume.service;
 
-import com.reader.rezume.constants.PersonPropertyKeys;
-import com.reader.rezume.entity.PersonalData;
 import com.reader.rezume.repository.PersonRepository;
 import com.reader.rezume.repository.impl.PersonRepositoryFromPropertyFile;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-/**
- * Implementation of the interface @see {@link SummaryService}
- */
 public class SummaryServiceImpl implements SummaryService {
 
-    /**
-     * Implementation of the method in the interface @see {@link SummaryService}
-     * @param pathHtmlFile path to the html file
-     * @param pathProperties path to the Property file
-     * @throws IOException
-     */
     @Override
-    public void createHtmlFile(String pathHtmlFile, String pathProperties) throws IOException {
-        PersonRepository personRepository = new PersonRepositoryFromPropertyFile(pathProperties);
-        PersonalData personalData = personRepository.getPersonalDataOfProperties();
-        Map<String, String> mapProperties = createMapProperties(personalData);
+    public void createHtmlFile(String pathHtmlFile, String pathProperties, String coding) throws IOException {
+        PersonRepository personRepository = new PersonRepositoryFromPropertyFile(pathProperties, coding);
+        Map<String, String> personalData = personRepository.getPersonalDataOfProperties();
 
         try {
-            writeToFile(pathHtmlFile, personalData, mapProperties);
+            writeToFile(pathHtmlFile, personalData, coding);
         } catch(IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    /**
-     * Method for creating map with properties
-     * @param personalData
-     * @return mapProperties
-     */
-    private Map<String, String> createMapProperties(PersonalData personalData) {
-        Map<String,String> mapProperties = new HashMap<>();
-        mapProperties.put(PersonPropertyKeys.FIO, personalData.getFIO());
-        mapProperties.put(PersonPropertyKeys.DOB, personalData.getDOB());
-        mapProperties.put(PersonPropertyKeys.PHONE, personalData.getPhone());
-        mapProperties.put(PersonPropertyKeys.EMAIL, personalData.getEmail());
-        mapProperties.put(PersonPropertyKeys.SKYPE, personalData.getSkype());
-        mapProperties.put(PersonPropertyKeys.AVATAR, personalData.getAvatar());
-        mapProperties.put(PersonPropertyKeys.TARGET, personalData.getTarget());
-        mapProperties.put(PersonPropertyKeys.EXPERIENCES, personalData.getExperiences());
-        mapProperties.put(PersonPropertyKeys.EDUCATIONS, personalData.getEducations());
-        mapProperties.put(PersonPropertyKeys.ADDITIONAL_EDUCATIONS, personalData.getAdditionalEducations());
-        mapProperties.put(PersonPropertyKeys.SKILLS, personalData.getSkills());
-        mapProperties.put(PersonPropertyKeys.EXAMPLES_CODE, personalData.getExamplesCode());
-        return mapProperties;
-    }
-
-    /**
-     * Method for writing an html file
-     * @param pathHtmlFile file path for writes
-     * @param personalData
-     * @param mapProperties properties
-     * @throws IOException
-     */
-    private void writeToFile(String pathHtmlFile, PersonalData personalData, Map<String, String> mapProperties) throws IOException {
+    private void writeToFile(String pathHtmlFile,  Map<String, String> personalData, String coding) throws IOException {
 
         if (pathHtmlFile.isEmpty() && personalData==null) {
             throw new IllegalArgumentException("Error saving file path!");
         }
 
-        BufferedReader reader = TemplateService.getStringFromHtmlFile(pathHtmlFile);
+        BufferedReader reader = TemplateService.getStringFromHtmlFile(pathHtmlFile, coding);
         File file = new File(pathHtmlFile.replaceAll("index.html", "rezume_index.html"));
         Writer writer = new OutputStreamWriter(new FileOutputStream(file.getAbsoluteFile()));
 
+        Map<String, List<String>> stringListHashMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : personalData.entrySet()) {
+            List<String> split = new ArrayList<>(Arrays.asList(entry.getValue().split(",")));
+            stringListHashMap.put(entry.getKey(), split);
+        }
+
         String line;
         while ((line = reader.readLine()) != null) {
-            writer.write(setPropertyValuesInTemplate(line, mapProperties));
+            writer.write(setPropertyValuesInTemplate(line, stringListHashMap));
         }
 
         writer.close();
     }
 
-    /**
-     * Method inserts values ​​into a template using the properties found
-     * @param line string from html file
-     * @param mapProperties property
-     * @return
-     */
-    private String setPropertyValuesInTemplate(String line, Map<String,String> mapProperties) {
-        for (Map.Entry<String, String> entry : mapProperties.entrySet()) {
+    private String setPropertyValuesInTemplate(String line, Map<String,List<String>> mapProperties) {
+
+        for (Map.Entry<String, List<String>> entry : mapProperties.entrySet()) {
             if (line.contains(entry.getKey())) {
-                line = line.replace('$' + entry.getKey(), entry.getValue());
+                String string = entry.getValue().get(0);
+                if (line.contains('$' + entry.getKey())) {
+                    line = line.replace('$' + entry.getKey(), string);
+                    if (entry.getValue().size() != 1) {
+                        entry.getValue().remove(0);
+                    }
+                }
             }
         }
         return line;
