@@ -1,7 +1,0 @@
-com\reader\rezume\service\TemplateService.class
-com\reader\rezume\validation\ValidationUtil.class
-com\reader\rezume\Main.class
-com\reader\rezume\service\SummaryService.class
-com\reader\rezume\repository\PersonRepository.class
-com\reader\rezume\repository\impl\PersonRepositoryFromPropertyFile.class
-com\reader\rezume\service\SummaryServiceImpl.class
