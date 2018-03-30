@@ -9,8 +9,8 @@ import java.util.*;
 public class SummaryServiceImpl implements SummaryService {
 
     @Override
-    public void createHtmlFile(String pathHtmlFile, String pathProperties, String coding) throws IOException {
-        PersonRepository personRepository = new PersonRepositoryFromPropertyFile(pathProperties, coding);
+    public void createHtmlFile(String pathHtmlFile, String pathProperties, String filePath2, String coding) throws IOException {
+        PersonRepository personRepository = new PersonRepositoryFromPropertyFile(pathProperties, filePath2, coding);
         Map<String, String> personalData = personRepository.getPersonalDataOfProperties();
 
         try {

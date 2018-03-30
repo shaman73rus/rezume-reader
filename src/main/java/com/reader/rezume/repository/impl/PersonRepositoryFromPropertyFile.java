@@ -10,17 +10,19 @@ public class PersonRepositoryFromPropertyFile implements PersonRepository {
 
     private Properties personDataFile;
 
-    public PersonRepositoryFromPropertyFile(String configFileInput, String coding) throws IOException {
-        this.personDataFile = getPropertiesFromFile(configFileInput, coding);
-    }
+    public PersonRepositoryFromPropertyFile(String configFileInput, String filePath2, String coding) throws IOException {
+        PropertyReader readerOnePropertyFile = new PropertyReader(configFileInput, coding);
+        PropertyReader readerTwoPropertyFile = new PropertyReader(filePath2, coding);
 
-    public Properties getPropertiesFromFile(String propertyPath, String coding) throws IOException {
-        Properties properties = new Properties();
+        try {
+            readerOnePropertyFile.t.join();
+            readerTwoPropertyFile.t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        properties.load(new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(propertyPath), coding)));
-        return properties;
+        this.personDataFile = readerOnePropertyFile.getPersonalDataOfProperties();
+        this.personDataFile.putAll(readerTwoPropertyFile.getPersonalDataOfProperties());
     }
 
     @Override

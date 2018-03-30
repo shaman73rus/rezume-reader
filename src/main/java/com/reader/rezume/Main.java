@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         if (ValidationUtil.isValidArguments(args)) {
             SummaryService summaryService = new SummaryServiceImpl();
-            summaryService.createHtmlFile(args[0], args[1], args[2]);
+            summaryService.createHtmlFile(args[0], args[1], args[2], args[3]);
         }
     }
 }
