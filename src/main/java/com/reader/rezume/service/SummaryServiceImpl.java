@@ -2,15 +2,27 @@ package com.reader.rezume.service;
 
 import com.reader.rezume.repository.PersonRepository;
 import com.reader.rezume.repository.impl.PersonRepositoryFromPropertyFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.*;
 
+@Component
 public class SummaryServiceImpl implements SummaryService {
 
+    private PersonRepository personRepository;
+
+    @Autowired
+    public SummaryServiceImpl(@Qualifier("personRepositoryFromPropertyFile") PersonRepositoryFromPropertyFile personRepositoryFromPropertyFile) {
+        this.personRepository = personRepositoryFromPropertyFile;
+    }
+
     @Override
-    public void createHtmlFile(String pathHtmlFile, String pathProperties, String filePath2, String coding) throws IOException {
-        PersonRepository personRepository = new PersonRepositoryFromPropertyFile(pathProperties, filePath2, coding);
+    public void createHtmlFile(String pathHtmlFile, String pathProperties, String coding) throws IOException {
+        personRepository.readToWriteProperty(pathProperties, coding);
+
         Map<String, String> personalData = personRepository.getPersonalDataOfProperties();
 
         try {
@@ -26,7 +38,7 @@ public class SummaryServiceImpl implements SummaryService {
             throw new IllegalArgumentException("Error saving file path!");
         }
 
-        BufferedReader reader = TemplateService.getStringFromHtmlFile(pathHtmlFile, coding);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(pathHtmlFile), coding));
         File file = new File(pathHtmlFile.replaceAll("index.html", "rezume_index.html"));
         Writer writer = new OutputStreamWriter(new FileOutputStream(file.getAbsoluteFile()));
 
