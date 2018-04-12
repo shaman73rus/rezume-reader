@@ -11,7 +11,6 @@ import java.io.IOException;
 @Component
 public class RezumeService {
     @Autowired
-    @Qualifier("propertyReader")
     private PropertyReader propertyReader;
 
     public PersonalData getProperties() throws IOException {

@@ -23,20 +23,20 @@ public class PropertyReader {
     }
 
     public PersonalData setFillingData(String pathProperties) throws IOException {
-       personDataFile = getPropertiesFromFile(pathProperties);
+        personDataFile = getPropertiesFromFile(pathProperties);
         personalData = new PersonalData(
-                personDataFile.getProperty(PersonPropertyKeys.FIO),
-                personDataFile.getProperty(PersonPropertyKeys.DOB),
-                personDataFile.getProperty(PersonPropertyKeys.PHONE),
-                personDataFile.getProperty(PersonPropertyKeys.EMAIL),
-                personDataFile.getProperty(PersonPropertyKeys.SKYPE),
-                personDataFile.getProperty(PersonPropertyKeys.AVATAR),
-                personDataFile.getProperty(PersonPropertyKeys.TARGET),
-                personDataFile.getProperty(PersonPropertyKeys.EXPERIENCES),
-                personDataFile.getProperty(PersonPropertyKeys.EDUCATIONS),
-                personDataFile.getProperty(PersonPropertyKeys.ADDITIONAL_EDUCATIONS),
-                personDataFile.getProperty(PersonPropertyKeys.SKILLS),
-                personDataFile.getProperty(PersonPropertyKeys.EXAMPLES_CODE));
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.FIO.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.DOB.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.phone.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.email.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.skype.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.avatar.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.target.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.experiences.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.educations.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.additional_educations.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.skills.name()),
+                personDataFile.getProperty(PersonPropertyKeys.PropertyKeys.examples_code.name()));
         return personalData;
     }
 

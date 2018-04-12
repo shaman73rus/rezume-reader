@@ -1,7 +1,15 @@
 package com.reader.rezume.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class PersonalData {
 
+    @Id
+    @GeneratedValue
+    private Long id;
     private String FIO;
     private String DOB;
     private String phone;
@@ -40,6 +48,10 @@ public class PersonalData {
         this.additionalEducations = additionalEducations;
         this.skills = skills;
         this.examplesCode = examplesCode;
+    }
+
+    public PersonalData() {
+
     }
 
     public String getFIO() {
@@ -88,5 +100,13 @@ public class PersonalData {
 
     public String getExamplesCode() {
         return examplesCode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
